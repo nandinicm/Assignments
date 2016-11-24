@@ -1,19 +1,32 @@
 #!/bin/bash
 if [ $# -eq 0 ]
   then
-    echo "No directory specified. Now using current directory as default"
-else
+    echo "No directory specified. Using current directory as default"
+  else
     cd "$1"
 fi
-myDir=`pwd` 
+myDir=razorthink`pwd | replace / _`
 ls -a1rRS
-for file in *
+mv $2 $myDir
+for f in *
 do
-    actualsize=$(du -k "$file" | cut -f 1)
+    if [ -d "$f" ]
+    then
+        for ff in $f/*
+        do      
+            actualsize=$(du -k "$ff" | cut -f 1)
     if [ $actualsize -eq 0 ]
 	then
-	  rm -i $file
+	  rm -i $ff
+    fi
+        done
+    else
+        actualsize=$(du -k "$f" | cut -f 1)
+    if [ $actualsize -eq 0 ]
+	then
+	  rm -i $f
+    fi
     fi
 done
-rename 's/.txt//g' *.*
-rename 's/.txt/razorthink/g' .*
+rename 's/'$2'//g' *.*
+rename 's/'$2'//g' ./*/*
