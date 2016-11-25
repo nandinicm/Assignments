@@ -1,0 +1,50 @@
+1. Separate user in every server with limited sudo privileges. User will be having permission to execute only a few commands by escalating as sudo user.  
+Create a password less user named razorthink having sudo privilege to execute only:  
+sudo netstat -tulnp  
+sudo ps -ef  
+sudo df -h  
+sudo fdisk -l  
+
+Steps followed:
+Step1: Add user named razorthink in the terminal using following command 
+       - sudo useradd razorthink
+       Enter password for created user
+       - sudo passwd razorthink
+Step2: Disable password for sudo privileges by entering NOPASSWD in sudo visudo with the format
+       - razorthink ALL=(ALL) NOPASSWD: ALL
+Step3: In the sudo visudo file, ALL at the end of line represents provision to execute any sudo command. So change ALL with required         
+       commands to be executed.
+Step4: Find the path of the commands by using which command
+       for example, >which netstat in terminal gives /bin/netstat. 
+Step5: Then add required options followed by the path as follows
+       - razorthink ALL=(ALL) NOPASSWD: /bin/netstat -tulnp, /sbin/fdisk -l, /bin/df -h, /bin/ps -ef
+       
+     
+2. Setting up cron jobs for security auditing using tiger (open source tool for performing security auditing). The cron job should send audit report after every alternate days.   
+
+Steps followed:
+Step1: Install tiger in terminal using following command
+       - sudo apt-get install tiger
+Step2: After successful installation, run tiger security audit using
+       - sudo tiger
+       Security report will be generated in root in the path /var/log/tiger 
+Step3: Create a cron job for running tiger security audit every alternate days with the crontab format
+       - 0 0 */2 * *
+Step4: Get the audit report to the mail from crontab. Enter a following format in crontab file above the cron jobs
+       MAILTO=nandini.cm@razorthink.net
+
+
+3. Performing initial security auditing using lynis (open source tool for security auditing). Fix the necessary security risks in the system and perform the auditing again to increase the security index of the server.
+
+Steps followed:
+Step1: Clone lynis to the system using following command in terminal
+       - git clone https://github.com/CISOfy/lynis
+Step2: Change directory to lynis and type the command in terminal to run lynis
+	   - ./lynis audit system -Q
+Step3: Go through the suggestions to fix the necessary security risks, thereby increasing the security index of the server
+Step4: As per suggestions, install debsums using sudo apt-get install debsums which increases security index by 2
+Step5: Update lynis thereby index is increased by 3
+Step6: Install and configure automation tools like configuration management Cfengine to help automating repeating tasks and increase 
+       integrity of systems. 
+Step7: Install arpwatch which monitors ARP traffic
+
