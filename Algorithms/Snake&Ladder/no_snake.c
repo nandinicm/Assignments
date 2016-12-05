@@ -20,9 +20,9 @@ else if(end-start<=6)
 ++move_count;
 return move_count;
 }
-for(i=(start+1);i<(start+7);i++)
+for(i=(start+1);i<=end;i++)
 {
-if((board[i]>max) && ((start+(i-start)+board[i])<end))
+if((board[i]>max) && ((start+(i-start)+board[i])<=end))
 {
 max=(int)board[i];
 move=(i-start);
@@ -35,7 +35,7 @@ move=5;
 }
 }
 move_count++;
-if((start+move+board[start+move])<end)
+if((start+move+board[start+move])<=end)
 start=start+move+board[start+move];
 else
 start=start+move;
